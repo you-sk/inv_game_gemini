@@ -1,0 +1,22 @@
+body {
+    margin: 0;
+    padding: 0;
+    background-color: #000;
+    color: #fff;
+    font-family: 'Press Start 2P', cursive; /* あとでドットフォントを読み込む */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    overflow: hidden;
+}
+
+#game-container {
+    border: 2px solid #fff;
+    box-shadow: 0 0 15px #fff;
+}
+
+canvas {
+    display: block;
+    background-color: #000;
+}
