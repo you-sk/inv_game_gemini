@@ -3,121 +3,121 @@ document.addEventListener('DOMContentLoaded', () => {
     const canvas = document.getElementById('gameCanvas');
     const ctx = canvas.getContext('2d');
 
-    // オリジナルの解像度に近い値で設定
-    const GAME_WIDTH = 224 * 2;
-    const GAME_HEIGHT = 256 * 2;
+    // オリジナルの解像度に近い値で設定し、画面を大きくする
+    const GAME_WIDTH = 224 * 3;
+    const GAME_HEIGHT = 256 * 3;
 
     canvas.width = GAME_WIDTH;
     canvas.height = GAME_HEIGHT;
 
     // ゲームの状態管理
     // Invader properties
-    const INVADER_WIDTH = 12; // Adjusted for sprite size
-    const INVADER_HEIGHT = 12; // Adjusted for sprite size
+    const INVADER_WIDTH = 24; // Adjusted for sprite size
+    const INVADER_HEIGHT = 24; // Adjusted for sprite size
     const INVADER_ROWS = 5;
     const INVADER_COLS = 11;
-    const INVADER_SPACING_X = 10; // Spacing between invaders horizontally
-    const INVADER_SPACING_Y = 10; // Spacing between invaders vertically
-    const INVADER_START_X = 50; // Starting X position for the first invader
+    const INVADER_SPACING_X = 20; // Spacing between invaders horizontally
+    const INVADER_SPACING_Y = 20; // Spacing between invaders vertically
+    const INVADER_START_X = 100; // Starting X position for the first invader
     const INVADER_START_Y = 80; // Starting Y position for the first invader
     const INVADER_MOVE_SPEED = 1; // Initial invader horizontal move speed
-    const INVADER_DROP_AMOUNT = 20; // How much invaders drop when hitting edge
+    const INVADER_DROP_AMOUNT = 40; // How much invaders drop when hitting edge
 
     // Invader pixel art patterns (2 frames for animation)
     const INVADER_SPRITES = [
-        // Type 0 (Top row - 30 points)
+        // Type 0 (Top row - Squid, 30 points)
         [
             [ // Frame 0
-                "  xx  ",
-                " xxx ",
-                "xxxxxx",
-                "xx  xx",
-                " x  x ",
-                "x x x ",
-            ],
-            [ // Frame 1
-                "  xx  ",
-                " xxx ",
-                "xxxxxx",
-                "xx  xx",
-                "x x x ",
-                " x  x ",
-            ]
-        ],
-        // Type 1 (20 points)
-        [
-            [ // Frame 0
+                "  x  ",
                 " xxxx ",
                 "xxxxxx",
-                "xx  xx",
+                "x xx x",
                 "xxxxxx",
-                "x x x ",
-                "x x x ",
+                "xx  xx"
             ],
             [ // Frame 1
+                "  x  ",
                 " xxxx ",
                 "xxxxxx",
-                "xx  xx",
+                "x xx x",
                 "xxxxxx",
-                " x x x",
-                "x x x ",
+                "  xx  "
             ]
         ],
-        // Type 2 (20 points)
+        // Type 1 (Middle rows - Crab, 20 points)
         [
             [ // Frame 0
                 "  xx  ",
-                " xxx ",
+                " xxxx ",
                 "xxxxxx",
-                "xx  xx",
-                " x  x ",
-                "x x x ",
+                "xx xx ",
+                "xxxxxx",
+                "  x  x"
             ],
             [ // Frame 1
                 "  xx  ",
-                " xxx ",
+                " xxxx ",
                 "xxxxxx",
-                "xx  xx",
-                "x x x ",
-                " x  x ",
+                "xx xx ",
+                "xxxxxx",
+                " x    x"
             ]
         ],
-        // Type 3 (10 points)
+        // Type 2 (Middle rows - Crab, 20 points)
         [
             [ // Frame 0
                 "  xx  ",
-                " xxx ",
+                " xxxx ",
                 "xxxxxx",
-                "xx  xx",
-                " x  x ",
-                "x x x ",
+                "xx xx ",
+                "xxxxxx",
+                "  x  x"
             ],
             [ // Frame 1
                 "  xx  ",
-                " xxx ",
+                " xxxx ",
                 "xxxxxx",
-                "xx  xx",
-                "x x x ",
-                " x  x ",
+                "xx xx ",
+                "xxxxxx",
+                " x    x"
             ]
         ],
-        // Type 4 (10 points)
+        // Type 3 (Bottom rows - Octopus, 10 points)
         [
             [ // Frame 0
                 "  xx  ",
-                " xxx ",
                 "xxxxxx",
-                "xx  xx",
-                " x  x ",
-                "x x x ",
+                "x xx x",
+                "xxxxxx",
+                "  xx  ",
+                " x  x "
             ],
             [ // Frame 1
                 "  xx  ",
-                " xxx ",
                 "xxxxxx",
-                "xx  xx",
-                "x x x ",
-                " x  x ",
+                "x xx x",
+                "xxxxxx",
+                "  xx  ",
+                "x    x"
+            ]
+        ],
+        // Type 4 (Bottom rows - Octopus, 10 points)
+        [
+            [ // Frame 0
+                "  xx  ",
+                "xxxxxx",
+                "x xx x",
+                "xxxxxx",
+                "  xx  ",
+                " x  x "
+            ],
+            [ // Frame 1
+                "  xx  ",
+                "xxxxxx",
+                "x xx x",
+                "xxxxxx",
+                "  xx  ",
+                "x    x"
             ]
         ]
     ];
@@ -139,8 +139,8 @@ document.addEventListener('DOMContentLoaded', () => {
     const SHIELD_SEGMENT_SIZE = 1; // Size of each small block within a shield
 
     // UFO properties
-    const UFO_WIDTH = 14; // Adjusted for sprite size
-    const UFO_HEIGHT = 8; // Adjusted for sprite size
+    const UFO_WIDTH = 28; // Adjusted for sprite size
+    const UFO_HEIGHT = 16; // Adjusted for sprite size
     const UFO_SPEED = 2;
     const UFO_Y = 60; // Y position for UFO
     let ufoSpawnTimer = 0;
@@ -217,8 +217,8 @@ document.addEventListener('DOMContentLoaded', () => {
         player: {
             x: 0,
             y: 0,
-            width: 12, // Adjusted based on sprite size and pixel size
-            height: 12, // Adjusted based on sprite size and pixel size
+            width: 24, // Adjusted based on sprite size and pixel size
+            height: 24, // Adjusted based on sprite size and pixel size
             speed: 3,
             lives: 3,
         },
@@ -241,7 +241,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if (gameState.gameStarted && !gameState.isGameOver) return;
         // プレイヤーの初期位置
         gameState.player.x = (GAME_WIDTH - gameState.player.width) / 2;
-        gameState.player.y = GAME_HEIGHT - 50;
+        gameState.player.y = GAME_HEIGHT - 80;
         
         // ハイスコアをLocalStorageから読み込み
         gameState.highScore = localStorage.getItem('invadersHighScore') || 0;
@@ -366,7 +366,7 @@ document.addEventListener('DOMContentLoaded', () => {
             gameState.player.x = 0;
         }
         if (gameState.player.x > GAME_WIDTH - gameState.player.width) {
-            gameState.player.x = GAME_WIDTH - gameState.player.x; // Fix: Should be gameState.player.width
+            gameState.player.x = GAME_WIDTH - gameState.player.width; // Fix: Correct boundary calculation
         }
 
         // 弾の発射
@@ -584,6 +584,12 @@ document.addEventListener('DOMContentLoaded', () => {
                 break;
             }
         }
+
+        // Check for level clear
+        if (gameState.invaders.filter(inv => inv.alive).length === 0) {
+            gameState.level++;
+            createInvaders();
+        }
     }
 
     // New function to create UFO
@@ -653,7 +659,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // New function to draw UFO
     function drawUFO() {
         if (gameState.ufo && gameState.ufo.alive) {
-            drawSprite(UFO_SPRITE, gameState.ufo.x, gameState.ufo.y, 'red', 2);
+            drawSprite(UFO_SPRITE, gameState.ufo.x, gameState.ufo.y, 'red', 4);
         }
     }
 
@@ -671,26 +677,32 @@ document.addEventListener('DOMContentLoaded', () => {
     
     function drawUI() {
         ctx.fillStyle = 'white';
-        ctx.font = '16px "Press Start 2P", sans-serif'; // 仮のフォント
-        
+        ctx.font = '24px "Press Start 2P", sans-serif'; // フォントサイズも少し大きくする
+        const topMargin = 40;
+        const leftMargin = 40;
+
         // SCORE
-        ctx.fillText('SCORE<1>', 20, 30);
-        ctx.fillText(String(gameState.score).padStart(4, '0'), 40, 50);
+        ctx.textAlign = 'left';
+        ctx.fillText('SCORE<1>', leftMargin, topMargin);
+        ctx.fillText(String(gameState.score).padStart(4, '0'), leftMargin + 20, topMargin + 30);
 
         // HI-SCORE
-        ctx.fillText('HI-SCORE', GAME_WIDTH / 2 - 50, 30);
-        ctx.fillText(String(gameState.highScore).padStart(4, '0'), GAME_WIDTH / 2 - 30, 50);
+        ctx.textAlign = 'center';
+        ctx.fillText('HI-SCORE', GAME_WIDTH / 2, topMargin);
+        ctx.fillText(String(gameState.highScore).padStart(4, '0'), GAME_WIDTH / 2, topMargin + 30);
         
         // LIVES
-        ctx.fillText(String(gameState.player.lives), 20, GAME_HEIGHT - 10);
-        for (let i = 0; i < gameState.player.lives; i++) {
-            ctx.fillStyle = 'lime';
-            ctx.fillRect(20 + (i * (gameState.player.width + 5)), GAME_HEIGHT - 30, gameState.player.width, gameState.player.height);
+        ctx.textAlign = 'left';
+        const livesY = GAME_HEIGHT - 20;
+        ctx.fillText(String(gameState.player.lives), leftMargin, livesY);
+        // Draw player icons for remaining lives (lives - 1)
+        for (let i = 0; i < gameState.player.lives - 1; i++) {
+            drawSprite(PLAYER_SPRITE, leftMargin + 40 + (i * (gameState.player.width + 10)), livesY - 25, 'lime', 4);
         }
     }
 
     function drawPlayer() {
-        drawSprite(PLAYER_SPRITE, gameState.player.x, gameState.player.y, 'lime', 2);
+        drawSprite(PLAYER_SPRITE, gameState.player.x, gameState.player.y, 'lime', 4);
     }
 
     function drawBullets() {
@@ -705,7 +717,7 @@ document.addEventListener('DOMContentLoaded', () => {
         for (const invader of gameState.invaders) {
             if (invader.alive) {
                 const sprite = INVADER_SPRITES[invader.type][invaderAnimationFrame];
-                drawSprite(sprite, invader.x, invader.y, 'white', 2);
+                drawSprite(sprite, invader.x, invader.y, 'white', 4);
             }
         }
     }
@@ -769,7 +781,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 createInvaders();
                 createShields();
                 gameState.player.x = (GAME_WIDTH - gameState.player.width) / 2;
-                gameState.player.y = GAME_HEIGHT - 50;
+                gameState.player.y = GAME_HEIGHT - 80;
                 gameState.gameStarted = true; // Ensure gameStarted is true after restart
             }
         }
