@@ -2,8 +2,12 @@
 
 ## 概要
 
-これは、1978年にタイトーから発表されたアーケードゲーム「スペースインベーダー」をウェブブラウザ上で忠実に再現することを目指したクローンゲームです。
+これは、1978年にタイトーから発表されたアーケードゲーム「スペースインベーダー」をウェブブラウザ上で忠実？に再現することを目指したクローンゲームです。  
 オリジナルのグラフィック、サウンド、ゲームプレイ、挙動、UIなどを可能な限り再現し、当時のプレイヤーが感じたであろう体験を提供することを目的としています。
+
+![image](https://github.com/user-attachments/assets/8ee93ab3-c259-49e7-969e-a277c7f2ed45)
+
+https://you-sk.github.io/inv_game_gemini/
 
 ## 特徴
 
@@ -37,7 +41,6 @@
 | インベーダー（上から4,5段目） | 10点 |
 | UFO | 50, 100, 150, 300点（ランダム） |
 
----
+## ライセンス
 
-*This project is a clone created for educational purposes and respects the copyright of the original work.*
-*© 1978 TAITO CORPORATION*
+MITライセンスで公開しています。
